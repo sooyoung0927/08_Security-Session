@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 안내</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0ecff 100%);
+            font-family: "Pretendard", "Noto Sans KR", sans-serif;
+            color: #1f2937;
+        }
+
+        .message-wrapper {
+            width: 100%;
+            max-width: 520px;
+            padding: 24px;
+        }
+
+        .message-card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .message-top {
+            padding: 28px 28px 18px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            color: #ffffff;
+        }
+
+        .message-top h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .message-top p {
+            margin: 10px 0 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .message-body {
+            padding: 28px;
+        }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .message-title {
+            text-align: center;
+            margin: 0 0 12px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .message-text {
+            margin: 0;
+            padding: 16px 18px;
+            border-radius: 14px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #374151;
+            text-align: center;
+            word-break: keep-all;
+        }
+
+        .redirect-text {
+            margin: 18px 0 0;
+            text-align: center;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 600px) {
+            .message-wrapper {
+                padding: 16px;
+            }
+
+            .message-top,
+            .message-body {
+                padding: 22px;
+            }
+
+            .message-title {
+                font-size: 20px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="message-wrapper">
+    <div class="message-card">
+        <div class="message-top">
+            <h1>로그인 안내</h1>
+            <p>로그인 처리 중 안내 메시지가 발생했습니다.</p>
+        </div>
+
+        <div class="message-body">
+            <div class="icon-box">🔐</div>
+
+            <h2 class="message-title">로그인 페이지로 이동합니다</h2>
+
+            <p class="message-text" th:text="${message}">
+                오류 메시지가 표시되는 영역입니다.
+            </p>
+
+            <p class="redirect-text">
+                잠시 후 로그인 페이지로 자동 이동합니다.
+            </p>
+
+            <div class="button-group">
+                <a href="/auth/login" class="btn btn-primary">지금 로그인하러 가기</a>
+                <a href="/" class="btn btn-secondary">메인으로 이동</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const message = [[${message}]];
+    console.log("로그인 안내 메시지:", message);
+
+    setTimeout(() => {
+        window.location.replace("/auth/login");
+    }, 2200);
+</script>
+</body>
+</html>

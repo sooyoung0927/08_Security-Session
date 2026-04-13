@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fbff 0%, #eef4ff 55%, #f5fff8 100%);
+            font-family: "Pretendard", "Noto Sans KR", sans-serif;
+            color: #1f2937;
+        }
+
+        .signup-wrapper {
+            width: 100%;
+            max-width: 980px;
+            padding: 24px;
+        }
+
+        .signup-card {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e5e7eb;
+        }
+
+        .signup-side {
+            padding: 42px 36px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 60%, #16a34a 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .signup-side h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .signup-side p {
+            margin: 16px 0 0;
+            font-size: 15px;
+            line-height: 1.8;
+            opacity: 0.96;
+        }
+
+        .side-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .side-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .side-footer {
+            margin-top: 40px;
+            font-size: 13px;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .signup-form-area {
+            padding: 42px 36px;
+            background: #ffffff;
+        }
+
+        .form-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .form-header p {
+            margin: 10px 0 0;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .message-box {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .signup-form {
+            margin-top: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            height: 48px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 0 14px;
+            font-size: 14px;
+            color: #111827;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .input-hint {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #9ca3af;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+            height: 48px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 900px) {
+            .signup-card {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-side,
+            .signup-form-area {
+                padding: 32px 24px;
+            }
+
+            .signup-side h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .signup-wrapper {
+                padding: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="signup-wrapper">
+    <div class="signup-card">
+        <div class="signup-side">
+            <div>
+                <h1>회원가입</h1>
+                <p>
+                    새로운 계정을 생성하고 세션 기반 로그인 흐름을 바로 테스트할 수 있습니다.
+                    사용자 정보와 권한을 입력한 뒤 회원가입을 진행해 주세요.
+                </p>
+
+                <div class="side-badges">
+                    <div class="side-badge">세션 기반 인증</div>
+                    <div class="side-badge">권한별 접근 제어</div>
+                    <div class="side-badge">Spring Security</div>
+                </div>
+            </div>
+
+            <div class="side-footer">
+                가입 후 로그인하여 사용자 페이지와 관리자 페이지 접근 흐름을 확인할 수 있습니다.
+            </div>
+        </div>
+
+        <div class="signup-form-area">
+            <div class="form-header">
+                <h2>계정 정보 입력</h2>
+                <p>
+                    아래 항목을 입력한 뒤 회원가입을 완료해 주세요.
+                </p>
+            </div>
+
+            <div class="message-box" th:if="${message}" th:text="${message}">
+                오류 또는 안내 메시지가 표시되는 영역입니다.
+            </div>
+
+            <form class="signup-form" th:action="@{/user/signup}" method="post">
+                <div class="form-group">
+                    <label class="form-label" for="userId">아이디</label>
+                    <input class="form-input" type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" />
+                    <div class="input-hint">로그인 시 사용할 계정 아이디입니다.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="userName">이름</label>
+                    <input class="form-input" type="text" id="userName" name="userName" placeholder="이름을 입력하세요" />
+                    <div class="input-hint">화면에 표시되거나 식별에 사용될 사용자 이름입니다.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="userPass">비밀번호</label>
+                    <input class="form-input" type="password" id="userPass" name="userPass" placeholder="비밀번호를 입력하세요" />
+                    <div class="input-hint">보안을 위해 안전한 비밀번호를 설정해 주세요.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="role">권한</label>
+                    <select class="form-select" id="role" name="role">
+                        <option value="USER">일반회원</option>
+                        <option value="ADMIN">관리자</option>
+                    </select>
+                    <div class="input-hint">테스트 목적에 맞게 USER 또는 ADMIN 권한을 선택할 수 있습니다.</div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">회원가입</button>
+                    <a th:href="@{/auth/login}" class="btn btn-secondary">로그인 페이지로 이동</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const message = [[${message}]];
+    if (message) {
+        console.log("회원가입 안내 메시지:", message);
+    }
+</script>
+</body>
+</html>

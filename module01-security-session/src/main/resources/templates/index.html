@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>홈</title>
+
+    <th:block layout:fragment="css">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+                font-family: "Pretendard", "Noto Sans KR", sans-serif;
+                color: #1f2937;
+            }
+
+            .home-container {
+                max-width: 1200px;
+                margin: 40px auto;
+                padding: 0 20px 50px;
+            }
+
+            .hero-section {
+                background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+                color: #ffffff;
+                border-radius: 28px;
+                padding: 42px 36px;
+                box-shadow: 0 18px 40px rgba(37, 99, 235, 0.18);
+                margin-bottom: 28px;
+            }
+
+            .hero-section h1 {
+                margin: 0;
+                font-size: 34px;
+                font-weight: 800;
+                line-height: 1.2;
+            }
+
+            .hero-section p {
+                margin: 14px 0 0;
+                font-size: 16px;
+                line-height: 1.7;
+                opacity: 0.95;
+            }
+
+            .hero-user {
+                margin-top: 22px;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                background: rgba(255, 255, 255, 0.14);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 10px 16px;
+                border-radius: 999px;
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .section-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 22px;
+                margin-bottom: 24px;
+            }
+
+            .card {
+                background: #ffffff;
+                border-radius: 22px;
+                padding: 24px;
+                box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+                border: 1px solid #eaf0f6;
+            }
+
+            .card h2 {
+                margin: 0 0 10px;
+                font-size: 22px;
+                font-weight: 700;
+                color: #111827;
+            }
+
+            .card p {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.7;
+                color: #6b7280;
+            }
+
+            .role-badge-wrap {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-top: 18px;
+            }
+
+            .role-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px 14px;
+                border-radius: 999px;
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+            .role-admin {
+                background: #dbeafe;
+                color: #1d4ed8;
+            }
+
+            .role-user {
+                background: #dcfce7;
+                color: #15803d;
+            }
+
+            .action-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 140px;
+                padding: 12px 18px;
+                border-radius: 12px;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 700;
+                border: none;
+                cursor: pointer;
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
+            }
+
+            .btn:hover {
+                transform: translateY(-1px);
+            }
+
+            .btn-primary {
+                background: #2563eb;
+                color: #ffffff;
+                box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+            }
+
+            .btn-secondary {
+                background: #f3f4f6;
+                color: #374151;
+                border: 1px solid #e5e7eb;
+            }
+
+            .btn-danger {
+                background: #ef4444;
+                color: #ffffff;
+                box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+            }
+
+            .menu-section {
+                background: #ffffff;
+                border-radius: 24px;
+                padding: 28px;
+                box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+                border: 1px solid #eaf0f6;
+            }
+
+            .menu-section h2 {
+                margin: 0 0 8px;
+                font-size: 24px;
+                font-weight: 700;
+                color: #111827;
+            }
+
+            .menu-section .desc {
+                margin: 0 0 22px;
+                color: #6b7280;
+                font-size: 14px;
+            }
+
+            .menu-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 18px;
+            }
+
+            .menu-card {
+                display: block;
+                text-decoration: none;
+                background: #f8fbff;
+                border: 1px solid #e5edf7;
+                border-radius: 18px;
+                padding: 22px;
+                transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            }
+
+            .menu-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+                background: #ffffff;
+            }
+
+            .menu-card-title {
+                margin: 0 0 8px;
+                font-size: 18px;
+                font-weight: 700;
+                color: #111827;
+            }
+
+            .menu-card-text {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.6;
+                color: #6b7280;
+            }
+
+            .logout-form {
+                margin: 0;
+            }
+
+            .guest-box {
+                margin-top: 18px;
+                padding: 14px 16px;
+                border-radius: 14px;
+                background: #f9fafb;
+                border: 1px solid #e5e7eb;
+                color: #4b5563;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            @media (max-width: 768px) {
+                .home-container {
+                    margin: 24px auto;
+                    padding: 0 16px 36px;
+                }
+
+                .hero-section {
+                    padding: 30px 24px;
+                }
+
+                .hero-section h1 {
+                    font-size: 28px;
+                }
+
+                .btn {
+                    width: 100%;
+                }
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="home-container">
+
+        <section class="hero-section">
+            <h1>Spring Security Session Demo</h1>
+            <p>
+                세션 기반 인증 방식을 활용한 로그인, 로그아웃, 권한별 페이지 접근,
+                관리자 로그인 로그 조회 기능을 확인할 수 있습니다.
+            </p>
+
+            <div class="hero-user" sec:authorize="isAuthenticated()">
+                현재 로그인 사용자:
+                <span sec:authentication="name"></span>
+            </div>
+
+            <div class="hero-user" sec:authorize="isAnonymous()">
+                현재 로그인 상태가 아닙니다.
+            </div>
+        </section>
+
+        <div class="section-grid">
+            <div class="card">
+                <h2>권한 안내</h2>
+                <p>
+                    현재 로그인한 사용자의 권한에 따라 접근 가능한 화면이 달라집니다.
+                    관리자와 일반 사용자 화면을 각각 확인할 수 있습니다.
+                </p>
+
+                <div class="role-badge-wrap">
+                    <div sec:authorize="hasAnyAuthority('ADMIN')" class="role-badge role-admin">
+                        ADMIN 권한으로 로그인 중
+                    </div>
+
+                    <div sec:authorize="hasAnyAuthority('USER')" class="role-badge role-user">
+                        USER 권한으로 로그인 중
+                    </div>
+
+                    <div sec:authorize="isAnonymous()" class="role-badge role-admin" style="background:#f3f4f6; color:#4b5563;">
+                        비회원 상태
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>계정 기능</h2>
+                <p>
+                    로그인, 회원가입, 로그아웃 기능을 이곳에서 바로 사용할 수 있습니다.
+                </p>
+
+                <div class="action-group" sec:authorize="isAnonymous()">
+                    <a th:href="@{/auth/login}" class="btn btn-primary">로그인 하기</a>
+                    <a th:href="@{/user/signup}" class="btn btn-secondary">회원가입</a>
+                </div>
+
+                <div class="action-group" sec:authorize="isAuthenticated()">
+                    <a th:href="@{/auth/login}" class="btn btn-secondary">로그인 페이지</a>
+
+                    <form th:action="@{/auth/logout}" th:method="post" class="logout-form">
+                        <button type="submit" class="btn btn-danger">로그아웃</button>
+                    </form>
+                </div>
+
+                <div class="guest-box" sec:authorize="isAnonymous()">
+                    로그인 후 사용자 페이지 또는 관리자 페이지에 접근할 수 있습니다.
+                </div>
+
+                <div class="guest-box" sec:authorize="isAuthenticated()">
+                    현재 계정 권한에 따라 접근 가능한 메뉴를 아래에서 확인하세요.
+                </div>
+            </div>
+        </div>
+
+        <section class="menu-section">
+            <h2>바로가기 메뉴</h2>
+            <p class="desc">
+                권한에 맞는 페이지로 이동하여 기능을 테스트할 수 있습니다.
+            </p>
+
+            <div class="menu-grid">
+                <a th:href="@{/admin/logs}"
+                   class="menu-card"
+                   sec:authorize="hasAnyAuthority('ADMIN')">
+                    <h3 class="menu-card-title">관리자 페이지</h3>
+                    <p class="menu-card-text">
+                        로그인 로그, 활성 사용자 수 등 관리자 전용 기능을 확인할 수 있습니다.
+                    </p>
+                </a>
+
+                <a th:href="@{/user/page}"
+                   class="menu-card"
+                   sec:authorize="hasAnyAuthority('USER', 'ADMIN')">
+                    <h3 class="menu-card-title">사용자 페이지</h3>
+                    <p class="menu-card-text">
+                        일반 사용자 또는 관리자가 접근 가능한 사용자 전용 페이지입니다.
+                    </p>
+                </a>
+
+                <a th:href="@{/auth/login}"
+                   class="menu-card"
+                   sec:authorize="isAnonymous()">
+                    <h3 class="menu-card-title">로그인 페이지</h3>
+                    <p class="menu-card-text">
+                        계정 인증 후 세션 기반 로그인 기능을 테스트할 수 있습니다.
+                    </p>
+                </a>
+
+                <a th:href="@{/user/signup}"
+                   class="menu-card"
+                   sec:authorize="isAnonymous()">
+                    <h3 class="menu-card-title">회원가입 페이지</h3>
+                    <p class="menu-card-text">
+                        새로운 사용자 계정을 생성하고 로그인 흐름을 확인할 수 있습니다.
+                    </p>
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>
