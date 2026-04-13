@@ -20,6 +20,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
+    /*comment
+    *  UserDetailService 를 상속 받아 메서드 구현 후 우리가 가지고 있을 정보 객체 만드는 것*/
 
 
     private final MemberService memberService;
@@ -37,6 +39,9 @@ public class AuthService implements UserDetailsService {
             throw new UsernameNotFoundException("회원정보가 존재하지 않습니다.");
         }
 
+        // 해당 리턴구문이 동작하게 되먄
+        // Security Context 에 LoginDTO 정보를 담은 Session 인증 객체가 만들어지며
+        // 우리는 해당 값을 Session이 유지되는 동안 계속 사용할 수 있게 된다
         return new AuthDetails(login);
     }
 }

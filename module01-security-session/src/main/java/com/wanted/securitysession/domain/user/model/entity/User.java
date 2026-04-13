@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(
+        // ID에 유니크 제약조건 걸기
     name = "TBL_USER",
     uniqueConstraints = {
         @UniqueConstraint(name = "uk_user_id", columnNames = "USER_ID")

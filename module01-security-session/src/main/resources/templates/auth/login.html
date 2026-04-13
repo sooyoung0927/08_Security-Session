@@ -1,23 +1,310 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>로그인</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fbff 0%, #eef4ff 55%, #f5fff8 100%);
+            font-family: "Pretendard", "Noto Sans KR", sans-serif;
+            color: #1f2937;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 980px;
+            padding: 24px;
+        }
+
+        .login-card {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e5e7eb;
+        }
+
+        .login-side {
+            padding: 42px 36px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 60%, #16a34a 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .login-side h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .login-side p {
+            margin: 16px 0 0;
+            font-size: 15px;
+            line-height: 1.8;
+            opacity: 0.96;
+        }
+
+        .side-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .side-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .side-footer {
+            margin-top: 40px;
+            font-size: 13px;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .login-form-area {
+            padding: 42px 36px;
+            background: #ffffff;
+        }
+
+        .form-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .form-header p {
+            margin: 10px 0 0;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .message-box {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .login-form {
+            margin-top: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 0 14px;
+            font-size: 14px;
+            color: #111827;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .form-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 18px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            cursor: pointer;
+            accent-color: #2563eb;
+        }
+
+        .checkbox-group label {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #4b5563;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+            height: 48px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 900px) {
+            .login-card {
+                grid-template-columns: 1fr;
+            }
+
+            .login-side,
+            .login-form-area {
+                padding: 32px 24px;
+            }
+
+            .login-side h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .login-wrapper {
+                padding: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <form th:action="@{/auth/login}" th:method="POST">
-        <label>아이디 : </label>
-        <input type="text" id="user" name="user"/>
-        <br>
-        <label>비밀번호 : </label>
-        <input type="password" id="pass" name="pass"/>
-        <br>
-        <label>
-            <input type="checkbox" id="remember-me" name="remember-me"/>
-            이 컴퓨터에서 ID 기억하기
-        </label>
-        <br>
-        <button>로그인</button>
-    </form>
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="login-side">
+            <div>
+                <h1>로그인</h1>
+                <p>
+                    계정 정보를 입력하여 세션 기반 로그인을 진행할 수 있습니다.
+                    아이디와 비밀번호를 입력한 뒤 로그인해 주세요.
+                </p>
+
+                <div class="side-badges">
+                    <div class="side-badge">세션 기반 인증</div>
+                    <div class="side-badge">권한별 접근 제어</div>
+                    <div class="side-badge">Spring Security</div>
+                </div>
+            </div>
+
+            <div class="side-footer">
+                로그인 후 사용자 페이지와 관리자 페이지 접근 흐름을 확인할 수 있습니다.
+            </div>
+        </div>
+
+        <div class="login-form-area">
+            <div class="form-header">
+                <h2>계정 로그인</h2>
+                <p>
+                    아이디와 비밀번호를 입력하여 로그인해 주세요.
+                </p>
+            </div>
+
+            <div class="message-box" th:if="${message}" th:text="${message}">
+                오류 또는 안내 메시지가 표시되는 영역입니다.
+            </div>
+
+            <form class="login-form" th:action="@{/auth/login}" method="post">
+                <div class="form-group">
+                    <label class="form-label" for="user">아이디</label>
+                    <input class="form-input" type="text" id="user" name="user" placeholder="아이디를 입력하세요" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="pass">비밀번호</label>
+                    <input class="form-input" type="password" id="pass" name="pass" placeholder="비밀번호를 입력하세요" />
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember-me" name="remember-me" />
+                    <label for="remember-me">이 컴퓨터에서 ID 기억하기</label>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">로그인</button>
+                    <a th:href="@{/user/signup}" class="btn btn-secondary">회원가입</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const message = [[${message}]];
+    if (message) {
+        console.log("로그인 안내 메시지:", message);
+    }
+</script>
 </body>
 </html>

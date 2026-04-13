@@ -14,6 +14,9 @@ public class LoginUserDTO {
     private int loginFailCount;
     private boolean isAccountLocked;
 
+    // id,pw 전용 dto가 아니다
+    // id,pw는 Security Config에서 담당을 시키고
+    // 해당 클래스는 로그인 시 Session에 담아둘 정보를 기입한다
 
     public LoginUserDTO() {
     }
@@ -28,6 +31,10 @@ public class LoginUserDTO {
         this.isAccountLocked = isAccountLocked;
     }
 
+    // 문자열로 사용자의 권한을 처리하지만
+    // 다중 권한을 위해 여러 권한을 insert 하면
+    // USER, ADMIN 이렇게 DB에 들어갈 수 있게 세팅을 해두었다
+    // 따라서 해당 메서드는 쉼표를 기준으로 두 문자열을 분리하는 메서드이다
     public List<String> getRole(){
         if(this.userRole != null && this.userRole.length()>0){
             return Arrays.asList(this.userRole.split(","));

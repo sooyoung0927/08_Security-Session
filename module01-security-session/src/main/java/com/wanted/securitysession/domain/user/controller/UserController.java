@@ -21,12 +21,16 @@ public class UserController {
 
     @GetMapping("/signup")
     public void signup(){
-
     }
 
     @PostMapping("/signup")
     public ModelAndView signup(@ModelAttribute SignupDTO signupDTO, ModelAndView mv){
 
+        // @ModelAttribute 사용자의 요청을 받고
+        // ModelAndView 처리 결과를 화면으로 출력되도록
+
+        // dml -> 회원가입이 완료된다 -> 데이터 1개 행이 추가되면
+        // server애 영향을 받은 행의 수만큼 정수값을 반환해준다
         Integer result = memberService.regist(signupDTO);
         String message = null;
         if(result == null ){

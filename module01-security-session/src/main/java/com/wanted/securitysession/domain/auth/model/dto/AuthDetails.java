@@ -13,9 +13,12 @@ import java.util.Objects;
  * 반환되는 사용자 타입으로 해당 개체에 조회된 사용자의 정보가 담겨서 session에 저장할 수 있다.
  * */
 public class AuthDetails implements UserDetails {
+    /*comment
+    *  UserDetail 상속 받아 로그인 시 Session에 담아둘 정보 커스터마이징*/
 
     private LoginUserDTO loginUserDTO;
 
+    // session에 담을 용도로 사용하는 커스텀 DTO
     public AuthDetails() {
     }
 
@@ -56,6 +59,7 @@ public class AuthDetails implements UserDetails {
      * 사용자의 아이디를 반환하는 메서드이다.
      * UsernamePasswordAuthenticationToken과 사용자의 아이디를 비교할 때 사용된다.
      * */
+    // username은 ID이다 잊지 말자
     @Override
     public String getUsername() {
         return loginUserDTO.getUserId();

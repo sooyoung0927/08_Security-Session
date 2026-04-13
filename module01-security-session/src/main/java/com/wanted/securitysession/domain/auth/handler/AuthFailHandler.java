@@ -35,9 +35,15 @@ import java.time.LocalDateTime;
  * 2. 로그인 실패 로그 저장
  * */
 public class AuthFailHandler extends SimpleUrlAuthenticationFailureHandler {
+    /*comment
+    *  실패 시 어떻게 동작할지 */
+
 
     private final MemberService memberService;
     private final LoginLogRepository loginLogRepository;
+
+    /*comment
+    *  repository를 바로 가는 게 좋은 게 아니라 service를 들렀다가 가야함 */
 
     public AuthFailHandler(MemberService memberService, LoginLogRepository loginLogRepository) {
         this.memberService = memberService;
@@ -55,7 +61,7 @@ public class AuthFailHandler extends SimpleUrlAuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
         String errorMessage;
-        String username = request.getParameter("user");
+        String username = request.getParameter("user"); // ID값을 꺼내온다
 
         if (exception instanceof BadCredentialsException) {
             // BadCredentialsException 오류는 사용자의 아이디가 DB에 존재하지 않는 경우,
