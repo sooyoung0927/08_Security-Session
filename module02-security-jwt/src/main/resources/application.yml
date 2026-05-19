@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/login_jwt
+    username: wanted
+    password: wanted
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+jwt:
+  # JWT의 서명(Signature)을 만들고 검증하는 비밀 키 랜덤한 값을 넣으면 된다.
+  secret: "ThisIsAOhgiraffersVeryLongAndSecureSecretKeyForHS256AlgorithmExampleOnlyChangeItInProduction"
+  access-token-validity-milliseconds: 3600000 # 1시간
+  refresh-token-validity-milliseconds: 864000000 # 10일

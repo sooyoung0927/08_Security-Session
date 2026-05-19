@@ -1,0 +1,11 @@
+@accessToken =eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuZXdVc2VyVGVzdDAxIiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NjIxNzg1ODYsImV4cCI6MTc2MjE4MjE4Nn0.p-mGsHOTEtl3z7Bndgn8c2rudb54f74YBZk4HbO3DDyZ_8XUpMwDAf0Ej8OZ041lE0ADTSgjsCuwtOHjHaIQKg
+@refreshToken =eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NjIxNzg1ODYsImV4cCI6MTc2MzA0MjU4Nn0.DWVGXAbHQ1zu3I5DA1WQlugHlzTqfaUt8HyVaq-fWOCI3x-lTXu4dTH72k5vVrq6zdQu1UIH5d57U1MqEE4V8w
+
+
+###  (신규) 인증된 관리자(ADMIN) 테스트
+# @GetMapping("/api/admin/test")
+# 6번 로그인 요청이 먼저 성공해야 함 (ADMIN 권한이 있는 사용자로)
+GET http://localhost:8080/api/admin/test
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+X-Refresh-Token: {{refreshToken}}

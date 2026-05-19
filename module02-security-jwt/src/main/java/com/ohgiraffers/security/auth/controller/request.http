@@ -1,0 +1,106 @@
+### 1. 사용자 회원가입 (성공 예시)
+# @PostMapping("/signup")
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "newUserTest02",
+  "password": "password123456",
+  "email": "testuser@example2.com",
+  "roles": ["ROLE_ADMIN", "ROLE_USER"]
+}
+
+### 2. 사용자 회원가입 (검증 실패: 사용자 ID 4자 미만)
+# @PostMapping("/signup")
+# @Valid @Size(min = 4, ...)
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "abc",
+  "password": "password123456",
+  "email": "failuser1@example.com",
+  "roles": ["ROLE_USER"]
+}
+
+### 3. 사용자 회원가입 (검증 실패: 이메일 형식 오류)
+# @PostMapping("/signup")
+# @Valid @Email
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "validationTest",
+  "password": "password123456",
+  "email": "invalid-email-format",
+  "roles": ["ROLE_USER"]
+}
+
+### 4. 사용자 회원가입 (검증 실패: 역할 누락)
+# @PostMapping("/signup")
+# @Valid @NotEmpty
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "noRoleUser",
+  "password": "password123456",
+  "email": "norole@example.com",
+  "roles": []
+}
+
+### 5. 사용자 회원가입 (검증 실패: 비밀번호 6자 미만)
+# @PostMapping("/signup")
+# @Valid @Size(min = 6, ...)
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "shortPasswordUser",
+  "password": "123",
+  "email": "shortpw@example.com",
+  "roles": ["ROLE_USER"]
+}
+
+
+
+
+### 6. (신규) 사용자 로그인 (성공 예시)
+# @PostMapping("/api/auth/login")
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "newUserTest01",
+  "password": "password123456"
+}
+
+### 7. (신규) 사용자 로그인 (검증 실패: 사용자 ID 4자 미만)
+# @PostMapping("/api/auth/login")
+# @Valid @Size(min = 4, ...)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "abc",
+  "password": "password123456"
+}
+
+### 8. (신규) 사용자 로그인 (검증 실패: 비밀번호 6자 미만)
+# @PostMapping("/api/auth/login")
+# @Valid @Size(min = 6, ...)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "newUserTest01",
+  "password": "123"
+}
