@@ -55,7 +55,7 @@ public class SecurityConfig {
 
     /*comment
     *  JWT 관련 커스텀 필터, 인증/인가 실패시 예외처리 클래스 */
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter; //입구에 서서 JWT를 검사하는 경비원 "이 종이 진짜야? 유통기한 지났어?" 확인
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
@@ -104,7 +104,13 @@ public class SecurityConfig {
                 "Origin",
                 "Access-Control-Request-Method",
                 "Access-Control-Request-Headers",
-                "X-Refresh-Token" // 리프레시 토큰을 위한 커스텀 헤더 (예시)
+                "X-Refresh-Token" // 리프레시 토큰을 위한 커스텀 헤더
+                /*
+                *  X-Refresh-Token이 여기 없으면,
+                * 프론트가 이 헤더를 보내려 해도 브라우저가 차단합니다.
+                * 이 헤더는 JwtAuthenticationFilter에서 request.getHeader("X-Refresh-Token")으로 꺼내 씁니다.
+                * 즉 필터에서 꺼내 쓰려면 CORS에서 먼저 허용해줘야 합니다.
+                * */
         ));
 
         // ✅ 클라이언트(브라우저)에게 노출할 수 있는 응답 헤더 설정
@@ -112,20 +118,32 @@ public class SecurityConfig {
         // 클라이언트 JavaScript에서 접근 가능
         configuration.setExposedHeaders(Arrays.asList(
                 "Authorization",
-                "New-Access-Token" // 새 액세스 토큰 전달용 커스텀 헤더 (예시)
+                "New-Access-Token" // 새 액세스 토큰 전달용 커스텀 헤더
+                /*
+                서버가 응답할 때 보내는 헤더 중 프론트 JavaScript가 읽을 수 있는 헤더 목록입니다.
+                브라우저는 기본적으로 커스텀 응답 헤더를 JS에서 읽지 못하게 막습니다.
+                New-Access-Token이 여기 없으면, 서버가 재발급한 토큰을 응답 헤더에 담아 보내도
+                프론트 JS가 response.headers.get('New-Access-Token')으로 읽을 수가 없습니다.
+                JwtAuthenticationFilter에서 response.setHeader("New-Access-Token", newTokens)로 보내는 바로 그 값입니다
+                */
         ));
 
         // ✅ 자격 증명(쿠키, Authorization 헤더 등)을 허용할지 여부 설정
         // true로 설정해야 쿠키를 사용한 인증이나 Authorization 헤더를 통한 토큰 인증이 가능.
         configuration.setAllowCredentials(true);
+        //Authorization 헤더(JWT 토큰)를 요청에 포함해도 된다는 허가입니다.
+        // 이게 false면 브라우저가 인증 관련 헤더를 아예 안 보냅니다. JWT 인증이 통째로 안 됩니다.
+
 
         // ✅ OPTIONS 사전 요청(Preflight Request)의 결과를 캐시할 시간(초 단위) 설정
         configuration.setMaxAge(3600L); // 1시간
 
-        // UrlBasedCorsConfigurationSource 객체를 생성하고, 모든 경로("/**")에 대해 위에서 정의한 CORS 설정을 등록합니다.
+        // UrlBasedCorsConfigurationSource 객체를 생성하고,
+        // 모든 경로("/**")에 대해 위에서 정의한 CORS 설정을 등록합니다.
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+        // 이 빈은 아래 securityFilterChain()에서 http.cors(...)에 의해 자동으로 참조됩니다.
     }
 
 
@@ -146,19 +164,27 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+        // AuthenticationManager는 "아이디/비밀번호 맞는지 확인하는 심사관"입니다.
     }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+        // "비밀번호 암호화 기계 만들기"
     }
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         /*
+        * 서드를 연결해서 경비 규칙을 만들고,
+        * 마지막에 .build()를 호출하면 완성된 경비 시스템(SecurityFilterChain)이 만들어집니다.
+        * */
+
+        /*
         * csrf (Cross-Site Request Forgery)
-        *  인증된 사용자(로그인된 사용자)의 권한을 도용하여 사용자가 의도하지 않은 요청을 웹 서버에 보내도록 만드는 공격
+        *  인증된 사용자(로그인된 사용자)의 권한을 도용하여
+        *  사용자가 의도하지 않은 요청을 웹 서버에 보내도록 만드는 공격
         * > 사용자의 쿠키 값을 이용하여 원하는 작업을 수행하도록 만듬.
         * */
         return http
@@ -166,6 +192,7 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 생성 X
 //                =================================================================
+                // URL별 입장 규칙
                 .authorizeHttpRequests(auth -> auth
                         // 여기서 1차 인가 관련 방호벽
                         // /api/user/ 하위에 endpoint 중에 admin / user 권한 별로 접근하기 위해서는
@@ -180,6 +207,7 @@ public class SecurityConfig {
                 * HttpSecurity 설정 내에서 사용되며, Spring Security의 기존 필터 체인에 사용자 정의 필터를 특정 필터 앞에 추가할 때 사용
                 * */
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // "UsernamePasswordAuthenticationFilter 앞에 jwtAuthenticationFilter를 세워줘"
                 /*
                 * exceptionHandling
                 * 설정 내에서 Spring Security가 보안 관련 예외를 처리하는 방식을 지정

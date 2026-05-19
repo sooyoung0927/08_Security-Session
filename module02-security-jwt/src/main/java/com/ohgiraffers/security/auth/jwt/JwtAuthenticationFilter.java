@@ -35,6 +35,8 @@ import java.io.IOException;
 */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    // OncePerRequestFilter를 상속 받아서
+    // 하나의 요청에 딱 한 번만 자동으로 실행
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshService refreshService;
@@ -44,15 +46,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.refreshService = refreshService;
     }
 
+    // 로그인 후 프론트는 우리가 준 토큰값을 가지고 Authorization: Bearer eyJhbGci... 헤더를 붙여서 요청을 보냄
+    // 그럼 이 흐름이 실행 됨
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-        String accessToken = jwtTokenProvider.resolveToken(request); // "Authorization: Bearer <accessToken>"에서 추출
+
+        String accessToken = jwtTokenProvider.resolveToken(request);
+        // "Authorization: Bearer <accessToken>"에서 추출
+        // resolveToken = 요청 헤더에서 JWT 토큰 추출하는 역할
+        // -> 프론트 쪽에서 온 요청에서 토큰 값을 추출해와서 변수에 저장하는 코드
+
         try {
             if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
                 // Access Token이 유효한 경우
+                // getAuthentication = 토큰에서 사용자 정보 추출하는 역할
+                // 토큰 안에 담긴 사용자 정보를 가져옴
                 Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

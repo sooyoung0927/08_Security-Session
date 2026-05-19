@@ -80,7 +80,7 @@ public class JwtTokenProvider {
 
     // 🎯 AccessToken 생성
 //    ========================================================
-    public String createAccessToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication) { // 사용자 정보
         String username = authentication.getName();
 
         String authorities = authentication.getAuthorities().stream()
@@ -97,6 +97,8 @@ public class JwtTokenProvider {
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(key,  Jwts.SIG.HS512) // ✅ signWith만 전달하면 HS256 자동 적용
                 .compact();
+        // JWT는 세 부분으로 구성됩니다. 헤더(알고리즘 정보), 페이로드(담긴 정보), 서명(위조 방지 도장).
+        // 이 코드가 그 세 부분을 조립합니다.
     }
 //    =========================================================
 
